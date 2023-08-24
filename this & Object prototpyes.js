@@ -589,4 +589,34 @@ console.log(book.getInfo());
 
 
 
+// Getter and setter
+// for simple syntax
+
+showInfo() //Method
+get showInfo() //Property
+
+
+
+function changeName(newName){
+    this.name=newName;
+}
+// object's original name is Omar
+object.changeName("Ali");
+
+function changeEmail(newEmail){
+    this.email=email;
+}
+// setter
+set changeEmail(newEmail){
+    this.email=newEmail;
+}
+object.changeEmail("oooo@ooo.com");
+
+
+
+// JS doesn't support the actual usage of setters and getters 
+// but it makes the variable private and provides the definition of ( Encapsulation )
+
+
+
 // -------------------------------------
