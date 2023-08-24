@@ -1485,3 +1485,366 @@ var f=3;
 
 
 // ------------------------------------------------------
+
+
+
+// Chapter 6
+
+
+
+// Least Exposure
+
+// It makes sense that functions define their own scopes. But why do we need blocks to create scopes as well?
+// Software engineering articulates a fundamental discipline, typically applied to software security, called "The Principle of Least Privilege" (POLP). 1 And a variation of this principle that applies to our current discussion is typically labeled as "Least Exposure" (POLE).
+// POLP expresses a defensive posture to software architecture: components of the system should be designed to function with least privilege, least access, least exposure. If each piece is connected with minimum-necessary capabilities, the overall system is stronger from a security standpoint, because a compromise or failure of one piece has a minimized impact on the rest of the system.
+// If POLP focuses on system-level component design, the POLE Exposure variant focuses on a lower level; we'll apply it to how scopes interact with each other.
+// POLE, as applied to variable/function scoping, essentially says, default to exposing the bare minimum necessary, keeping everything else as private as possible. Declare variables in as small and deeply nested of scopes as possible, rather than placing everything in the global (or even outer function) scope.
+
+
+
+// Consider:
+
+function diff(x,y) {
+    if (x > y) {
+        let tmp = x;
+        x = y;
+        y = tmp;
+    }
+
+    return y - x;
+}
+diff(3,7);      // 4
+diff(7,5);      // 2
+
+// In this diff(..) function, we want to ensure that y is greater than or equal to x, so that when we subtract (y - x), the result is 0 or larger. If x is initially larger (the result would be negative!), we swap x and y using a tmp variable, to keep the result positive.
+// In this simple example, it doesn't seem to matter whether tmp is inside the if block or whether it belongs at the function level—it certainly shouldn't be a global variable! However, following the POLE principle, tmp should be as hidden in scope as possible. So we block scope tmp (using let) to the if block.
+
+
+
+// Invoking Function Expressions Immediately
+// There's another important bit in the previous factorial recursive program that's easy to miss: the line at the end of the function expression that contains })();.
+
+
+
+// For comparison, here's an example of a standalone IIFE:
+
+// outer scope
+
+(function(){
+    // inner hidden scope
+})();
+
+
+
+// Example 
+(function(){
+console.log("Hi");
+)(); //Hi
+
+
+
+// more outer scope
+
+// So, in other words, we're defining a function expression that's then immediately invoked. This common pattern has a (very creative!) name: Immediately Invoked Function Expression (IIFE).
+
+// Scoping with Blocks
+// You should by this point feel fairly comfortable with the merits of creating scopes to limit identifier exposure.
+
+// So far, we looked at doing this via function (i.e., IIFE) scope. But let's now consider using let declarations with nested blocks. In general, any { .. } curly-brace pair which is a statement will act as a block, but not necessarily as a scope.
+
+// A block only becomes a scope if necessary, to contain its block-scoped declarations (i.e., let or const). Consider:
+
+{
+    // not necessarily a scope (yet)
+
+    // ..
+
+    // now we know the block needs to be a scope
+    let thisIsNowAScope = true;
+
+    for (let i = 0; i < 5; i++) {
+        // this is also a scope, activated each
+        // iteration
+        if (i % 2 == 0) {
+            // this is just a block, not a scope
+            console.log(i);
+        }
+    }
+}
+// 0 2 4
+
+
+
+function diff(x,y) {
+    if (x > y) {
+        var tmp = x;    // `tmp` is function-scoped
+        x = y;
+        y = tmp;
+    }
+
+    return y - x;
+}
+
+
+ 
+// Where To let?
+// My advice to reserve var for (mostly) only a top-level function scope means that most other declarations should use let. But you may still be wondering how to decide where each declaration in your program belongs?
+
+// POLE already guides you on those decisions, but let's make sure we explicitly state it. The way to decide is not based on which keyword you want to use. The way to decide is to ask, "What is the most minimal scope exposure that's sufficient for this variable?"
+
+// Once that is answered, you'll know if a variable belongs in a block scope or the function scope. If you decide initially that a variable should be block-scoped, and later realize it needs to be elevated to be function-scoped, then that dictates a change not only in the location of that variable's declaration, but also the declarator keyword used. The decision-making process really should proceed like that.
+
+// If a declaration belongs in a block scope, use let. If it belongs in the function scope, use var (again, just my opinion).
+
+// But another way to sort of visualize this decision making is to consider the pre-ES6 version of a program. For example, let's recall diff(..) from earlier:
+
+
+
+function diff(x,y) {
+    var tmp;
+
+    if (x > y) {
+        tmp = x;
+        x = y;
+        y = tmp;
+    }
+
+    return y - x;
+}
+
+
+
+// No matter where such a loop is defined, the i should basically always be used only inside the loop, in which case POLE dictates it should be declared with let instead of var:
+
+for (let i = 0; i < 5; i++) {
+    // do something
+}
+
+
+
+// What's the Catch?
+// So far we've asserted that var and parameters are function-scoped, and let/const signal block-scoped declarations. There's one little exception to call out: the catch clause.
+// Since the introduction of try..catch back in ES3 (in 1999), the catch clause has used an additional (little-known) block-scoping declaration capability:
+
+
+
+try {
+    doesntExist();
+}
+catch (err) {
+    console.log(err);
+    // ReferenceError: 'doesntExist' is not defined
+    // ^^^^ message printed from the caught exception
+
+    let onlyHere = true;
+    var outerVariable = true;
+}
+
+console.log(outerVariable);     // true
+
+console.log(err);
+// ReferenceError: 'err' is not defined
+// ^^^^ this is another thrown (uncaught) exception
+
+
+
+// Blocked Over
+
+// The point of lexical scoping rules in a programming language is so we can appropriately organize our program's variables, both for operational as well as semantic code communication purposes.
+
+// And one of the most important organizational techniques is to ensure that no variable is over-exposed to unnecessary scopes (POLE). Hopefully you now appreciate block scoping much more deeply than before.
+
+
+// --------------------------------------------------------
+
+
+
+// Chapter 7
+
+// Clousers gives you access to an outer functions
+// scope from an inner function 
+
+// example 
+
+function outer(){
+    function inner(){
+        // ....
+    }
+}
+
+function human(){
+    const name="Omar";
+    function sayHi(){
+        console.log(`Hi ${name}`);
+    }
+    sayHi();
+}
+human(); //Hi Omar
+
+
+function human(){
+    const name="Omar";
+    function sayHi(){
+        console.log(`Hi ${name}`);
+    }
+    function howUDoing(){
+        console.log(`${name} is fine`);
+    }
+    sayHi();
+    howUDoing();
+}
+human();
+// Hi Omar
+// Omar is fine
+
+// They both have access to outer scope...
+// ...that what makes closure special, that...
+// I don't have to create a name variable twice
+
+
+// Example with Dynamic variable
+
+function human(n){
+    const name=n;
+    function sayHi(){
+        console.log(`Hi ${name}`);
+    }
+    function howUDoing(){
+        console.log(`${name} is fine`);
+    }
+    sayHi();
+    howUDoing();
+}
+human("Omar");
+
+// Hi Omar
+// Omar is fine
+
+function human(name){
+    function sayHi(){
+        console.log(`Hi ${name}`);
+    }
+    function howUDoing(){
+        console.log(`${name} is fine`);
+    }
+    sayHi();
+    howUDoing();
+}
+human("Omar");
+// Hi Omar
+// Omar is fine
+
+function human(name){
+    function sayHi(){
+        console.log(`Hi ${name}`);
+    }
+    function howUDoing(){
+        console.log(`${name} is fine`);
+    }
+    sayHi();
+    howUDoing();
+}
+const omar = human("Omar");
+console.log(omar);
+
+// You can use it without the outer function
+const name='Omar';
+function sayHi(){
+    console.log(`Hi ${name}`);
+}
+function sayHowUDoing(){
+    console.log(`${name} is good`);
+}
+sayHi();
+sayHowUDoing();
+
+
+// The human function is necessary cuz I want to be able to use it multiple times...
+// ...that's why it's important to have...
+// inner and outer functions
+
+function human(n){
+    const name=n;
+    function sayHi(){
+        console.log(`Hi ${name}`);
+    }
+    function howUDoing(){
+        console.log(`${name} is fine`);
+    }
+    return {
+        sayHi,
+        howUDoing
+    }
+}
+const omar=human("Omar");
+omar.sayHi();
+omar.howUDoing();
+// Hi Omar
+// Omar is fine
+
+// in omar.sayHi(), we are not gonna execute...
+// human function, we are gonna execute...
+// sayHi() function 
+
+
+// Magic of closure
+// Closure remembers the outer function scope..
+// ..even after creation time, even if it...
+// can't be accessed anymore
+
+
+
+// ------------------------------------------
+
+
+
+// Chapter 8
+// What Is a Module?
+// A module is a collection of related data and functions
+
+// Types of Modules 
+// Namespaces 
+// Data Structures (Stateful Grouping)
+// Modules (Stateful Access Control)
+// Module Factory (Multiple Instances)
+
+
+
+// Node CommonJS Modules
+
+module.exports.getName = getName;
+var records = [
+    { id: 14, name: "Kyle", grade: 86 },
+    { id: 73, name: "Suzy", grade: 87 },
+    { id: 112, name: "Frank", grade: 75 },
+    { id: 6, name: "Sarah", grade: 91 }
+];
+
+function getName(studentID) {
+    var student = records.find(
+        student => student.id == studentID
+    );
+    return student.name;
+}
+
+
+
+// Modern ES Modules (ESM)
+
+export { getName };
+
+
+
+var records = [
+    { id: 14, name: "Kyle", grade: 86 },
+    { id: 73, name: "Suzy", grade: 87 },
+    { id: 112, name: "Frank", grade: 75 },
+    { id: 6, name: "Sarah", grade: 91 }
+];
+
+function getName(studentID) {
+    var student = records.find(
+        student => student.id == studentID
+    );
+    return student.name;
+}
