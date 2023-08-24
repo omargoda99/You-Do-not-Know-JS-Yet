@@ -618,5 +618,242 @@ object.changeEmail("oooo@ooo.com");
 // but it makes the variable private and provides the definition of ( Encapsulation )
 
 
+const student = {
+
+    // data property
+    firstName: 'Monica',
+    
+    // accessor property(getter)
+    get getName() {
+        return this.firstName;
+    }
+};
+
+// accessing data property
+console.log(student.firstName); // Monica
+
+// accessing getter methods
+console.log(student.getName); // Monica
+
+// trying to access as a method
+console.log(student.getName()); // error
+
+
+
+const student = {
+    firstName: 'Monica',
+    
+    //accessor property(setter)
+    set changeName(newName) {
+        this.firstName = newName;
+    }
+};
+
+
 
 // -------------------------------------
+
+
+
+// Chapter 4
+
+// Constructor
+
+
+
+const user1={
+    id : 100,
+    username : "Omar",
+    salary : 5000
+};
+const user2={
+    id : 101,
+    username : "Saleh",
+    salary : 3500
+};
+const user3={
+    id : 102,
+    username : "Waleed",
+    salary : 5500
+};
+
+// Is it logical to increase each object's salary ? No
+// Use a constructor
+
+
+
+function User(name,id,salary){
+    this.name=name;
+    this.id=id;
+    this.salary=salary;
+    // this.salary=salary+1000; //to add each employees' salaries
+}
+let userOne=new User("Omar",100,5000);
+let userTwo=new User("Ahmed",101,4500);
+let userThree=new User("Khaled",102,5500);
+
+
+
+// Inheritance
+
+const me={
+    talk(){
+        return "Talking";
+    }
+}
+me.talk(); //Talking
+
+const you={
+    talk(){
+        return "Talking";
+    }
+}
+you.talk(); //Talking
+// We both are talking and human right ? 
+
+
+
+function person(){}
+person.prototype.talk=function(){
+    return "Talking";
+}
+const me=new person();
+me.talk(); //Talking
+
+
+function person(){
+    this.talk=function(){
+        return "Talking";
+    }
+}
+const me=new person();
+me.talk() //Talking
+
+
+
+function person(){
+    this.age=12;
+}
+const me=new person();
+person.age=40;
+me.age //12
+
+
+
+class SuperMan extends person{
+    fly(){
+        return "Flying";
+    }
+}
+const u=new SuperMan();
+u.fly(); //Flying
+u.talk(); //Talking
+
+
+
+// ------------------------------------
+
+
+
+// Chapter 5
+
+
+
+// Prototypes
+
+const dude={};
+console.log(dude);
+// __proto__: object
+
+dude.name="Omar";
+dude.age=20;
+
+// dude --> 
+// {
+//     name:"Omar",
+//     age:20,
+//     __proto__: object
+// }
+dude.talk() //undefined
+
+
+
+const humans=['Omar','Ali'];
+// --> humans
+// (2) ["Omar","Ali"]
+//     0: "Omar"
+//     1: "Ali"
+//     length: 2
+//     __proto__: Array(0)
+// Array has concat, find, filter, split, etc,...
+
+
+
+const human={
+    type : "human"
+};
+const omar=Object.create(human);
+
+// omar --> __proto__
+//          type: "human"
+//          __proto__: object
+
+// const me={} == const me=new Object();
+
+function Dude(name){
+    this.name=name;
+}
+const me=new Dude("Omar");
+
+// me.__proto__ === Dude.prototype is True
+
+
+
+// ---------------------------------
+
+
+
+// Chapter 6
+
+
+
+// Behavior Delegation leverages JavaScript’s prototype mechanism...
+// ...(linking objects to other objects) which lets some object provide...
+// ...a delegation to common utility objects for property or method references...
+// ...if not found on the object itself.
+
+
+
+const User = {
+    init(name) {
+        this.name = name;
+    },
+    getName() {
+        return this.name;
+    }
+};
+const Employee = Object.create(User);
+Employee.build = function(name, position) {
+    this.init(name);
+    this.position = position;
+};
+Employee.outputDetails = function() {
+    console.log(this.getName() + " is a " + this.position);
+};
+const omar = Object.create(Employee);
+john.build("Omar", "Developer"); 
+const goda = Object.create(Employee);
+mary.build("Goda", "Manager");
+omar.outputDetails(); // John is a Developer
+goda.outputDetails(); // Mary is a Manager
+
+
+
+// In JavaScript, the [[Prototype]] mechanism links objects to other objects. There are no abstract mechanisms like "classes",
+// ...no matter how much we try to convince ourselves otherwise.
+
+
+
+// As we can see, behavior delegation is the more natural way to model objects in JavaScript...
+// ...It leverages the prototype lookup process to enable peered objects to... 
+// ...delegate behavior with each other without strictly declaring class hierarchy, like in traditional object-oriented languages
