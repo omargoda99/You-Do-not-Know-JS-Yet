@@ -448,3 +448,175 @@ console.log(arr);
 // Math.ceil(x)	Returns x rounded up to its nearest integer
 // Math.floor(x)	Returns x rounded down to its nearest integer
 // Math.trunc(x)	Returns the integer part of x (new in ES6)
+
+
+
+//---------------------------------------------
+
+
+// Chapter 3
+
+// Most used natives
+
+String()
+Number()
+Boolean()
+Array()
+Object()
+Function()
+RegExp()
+Date()
+Error()
+Symbol() //added in ES6
+
+var s=new String("Hello World");
+console.log(s.toString()); //Hello World
+
+var a=new String("abc");
+typeof a; //Object not string
+
+a instanceof String; //true
+
+// The point is, new String("abc") creates a string wrapper object around "abc", not just the 
+// primitive "abc" value itself
+
+// There are no Null() and Undefined() native constructors, but nevertheless "Null", 
+// and "Undefined" are internal [[class]] values exposed
+
+Object.prototype.call("abc"); //"[object String]"
+Object.prototype.call(42); //"[object Number]"
+
+// Boxing Wrappers
+// primitive types don't have methods or properties so to access .length or .toString(), 
+// you need an object wrapper around the value
+
+var a="Omar";
+a.length; //4
+a.toUpperCase(); //OMAR
+
+var a=new Boolean(false);
+if(!a){
+    console.log("Oops"); //never runs
+}
+
+// You created an object wrapper around the false value, but objects themselves are truthy...
+// so using the object makes it behave the opposite way
+
+
+
+var a="abc";
+var b=new String("abc");
+var c=Object(a);
+
+typeof a; //string
+typeof b; //object
+typeof c; //object
+
+b instanceof String; //true
+c instanceof String; //true
+
+Object.prototype.call(b); //"[object String]"
+Object.prototype.call(c); //"[object String]"
+
+
+
+// Unboxing
+
+var a=new String("Omar");
+var b=new Number(120);
+var c=new Boolean(true);
+
+a.valueOf(); //Omar
+b.valueOf(); //120
+c.valueOf(); //true
+
+var a=new String("Hi");
+var b=a+" ";
+
+typeof a; //object
+typeof b; //string
+
+
+
+// Natives as constructors
+
+// Array()
+
+var a=new Array(1,2,3); //[1,2,3]
+var c=Array(1,2,4); //[1,2,4]
+// Doesn't require new keyword
+
+var b=[1,2,3]; //[1,2,3]
+
+a==b; //true
+a===b; //false
+a==c; //false
+a===c; //false
+
+// An array with atleast one "empty slot" in it is often called sparse array
+
+var a=new Array(3);
+a.length; //3
+
+// to visualize the difference 
+var a=new Array(3);
+var b=[undefined , undefined ,undefined];
+var c=[];
+c.length; //3
+
+// Object(...), Function(...) and RegExp(...)
+var c=new Object();
+c.foo="bar";
+c; // {foo : "bar"}
+
+var d={foo : "bar"};
+d; //{foo : "bar"}
+
+var e=new Function("a" , "return a*2;");
+var f=function(a){
+    return a*2;
+}
+var h=new RegExp("^a*b+","g");
+var j=/^a*b+/g;
+
+
+
+// Date(...) and Error(...)
+
+// Date and Error are the most useful natives among all of those, and you must use the new keyword
+
+// The time starts counting from 1/1/1970 in milliseconds
+
+if(!Date.now){
+    Date.now=function(){
+        return (new Date()).getTime();
+    };
+}
+
+// The Error constructor behaves the same like Array() but with the new keyword or not
+
+function foo(x){
+    if(!x){
+        throw new Error("x is not provided");
+    }
+}
+
+// Symbol (added in ES6)
+
+// They are designed for special built-in behaviors of ES6 constructors
+
+var mysym =Symbol("my own symbol");
+mysym; //Symbol(my own symbol)
+mysym.toString(); //"Symbol(my own symbol)"
+typeof mysym; "symbol"
+
+var a=[];
+a[mysym]="footbar";
+Object.getOwnPropertySymbols(a);
+// [Symbol(my own symbol)]
+
+// Symbols are not objects, they are simple scalar primitives
+
+
+
+//--------------------------------------------
