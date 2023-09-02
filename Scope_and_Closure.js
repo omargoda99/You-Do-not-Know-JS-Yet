@@ -1,4 +1,4 @@
-// Chapter 1 from 4 to 253
+// Chapter 1
 
 
 // How does JS know which variables are accessible by any given statements and how does it handle two variables of the same
