@@ -620,3 +620,398 @@ Object.getOwnPropertySymbols(a);
 
 
 //--------------------------------------------
+
+
+
+// Chapter 4
+
+// Type conversion
+// There is implicit and Explicit type conversion
+
+// Explicit type converstion
+
+var age=window.prompt("Enter your age");
+age+=1;
+console.log(age); //18 --> 181 
+
+var age=window.prompt("Enter your age");
+age=Number(age);
+age+=1;
+console.log(age); //18 --> 19 
+
+var my=Boolean(null); //false
+var my=Boolean(""); //false
+var my=Boolean(0); //false
+var my=Boolean(undefined); //false
+var my=Boolean(NaN); //false
+
+var my=Boolean("false"); //true
+
+
+
+// Implicit type converstion
+
+// numeric string used with + gives string type
+let result;
+
+result = '3' + 2; 
+console.log(result) // "32"
+
+result = '3' + true; 
+console.log(result); // "3true"
+
+result = '3' + undefined; 
+console.log(result); // "3undefined"
+
+result = '3' + null; 
+console.log(result); // "3null"
+
+result;
+
+result = '4' - '2'; 
+console.log(result); // 2
+
+result = '4' - 2;
+console.log(result); // 2
+
+result = '4' * 2;
+console.log(result); // 8
+
+result = '4' / 2;
+console.log(result); // 2
+
+// non-numeric string used with - , / , * results to NaN
+
+result;
+
+result = 'hello' - 'world';
+console.log(result); // NaN
+
+result = '4' - 'hello';
+console.log(result); // NaN
+
+
+
+// if boolean is used, true is 1, false is 0
+
+result;
+
+result = '4' - true;
+console.log(result); // 3
+
+result = 4 + true;
+console.log(result); // 5
+
+result = 4 + false;
+console.log(result); // 4
+
+
+
+// null is 0 when used with number
+result;
+
+result = 4 + null;
+console.log(result);  // 4
+
+result = 4 - null;
+console.log(result);  // 4
+
+
+
+// Arithmetic operation of undefined with number, boolean or null gives NaN
+
+result;
+
+result = 4 + undefined;
+console.log(result);  // NaN
+
+result = 4 - undefined;
+console.log(result);  // NaN
+
+result = true + undefined;
+console.log(result);  // NaN
+
+result = null + undefined;
+console.log(result);  // NaN
+
+// JavaScript Abstract Operations
+
+// Primitive is immutable 
+var name="Omar";
+console.log(name.toUpperCase()); //OMAR
+console.log(name); //Omar
+
+// primitive stored by value , non-primitive stored by reference
+// Implicit coercion
+
+false*10; //0
+
+// Explicit coercion
+
+Number("6")+Number("2"); //4
+ 
+// To convert non primitive to primitive 
+
+var a={}+1; //1
+
+toPrimitive(input, "number");
+valueOf(input);
+toString(input);
+
+[4 ,5] *2 ; //NaN
+"Omar" *2 ; //NaN
+"10" *2; //20
+
+// in ToNumber conversion 
+// undefined Returns NaN
+// null +0
+// Boolean if true 1 else +0 
+// Symbol TypeError 
+// BigInt TypeError
+// Object, first if it's not a primitive type convert it into a primitive type, then Return ? ToNumber
+
+a="10";
+b=20;
+console.log(+a+b); //30
+console.log(a+b); //1020
+
+
+
+[] //0
+[].toString(); ""
+[].valueOf(); []
+
+{} //NaN
+toPrimitive({} , number);
+{}.valueOf(); //{}
+{}.toString(); //"[object,object]"
+
+Array=[1,2,3,4];
+const myA=Array.toString();
+console.log(myA); //"1 ,2 ,3 ,4"
+
+1==true //true
+
+// loose equality compares values 2=="2" true, ''==0 true
+// Strict equality compares values and types 2==="2" false
+
+// Operator precedence 
+var a = 4*10+4; 
+// First multi. then add. --> 44
+
+// ++	Postfix Increment	i++
+// --	Postfix Decrement	i--
+// ++	Prefix Increment	++i
+// --	Prefix Decrement	--i
+// !	Logical NOT	!(x==y)
+// ~	Bitwise NOT	~x
+// +	Unary Plus	+x
+// -	Unary Minus	-x
+// typeof	Data Type	 typeof x
+// void	Evaluate Void	 void(0)
+// delete	Property Delete	 delete myCar.color
+// <<	Shift Left	x << 2
+// >>	Shift Right (signed)	x >> 2
+// >>>	Shift Right (unsigned)	x >>> 2
+// in	Property in Object	"PI" in Math
+// instanceof	Instance of Object	x instanceof Array
+// Comparison Operators
+// <	Less than	x < y 
+// <=	Less than or equal	x <= y
+// >	Greater than	x > y
+// >=	Greater than or equal	x >= Array
+// ==	Equal	x == y
+// ===	Strict equal	x === y
+// !=	Unequal	x != y
+// !==	Strict unequal	x !== y
+// Bitwise Operators
+// &	Bitwise AND	x & y
+// ^	Bitwise XOR	x ^ y
+// |	Bitwise OR	x | y
+// &&	Logical AND	x && y
+// ||	Logical OR	x || y
+// ??	Nullish Coalescing ES2020	x ?? y
+// ? :	Condition	? "yes" : "no"
+// =	Simple Assignment	x = y
+// :	Colon Assignment	x: 5
+// +=	Addition Assignment	x += y
+// -=	Subtraction Assignment	x -= y
+// *=	Multiplication Assignment	x *= y
+// **=	Exponentiation Assignment	x **= y
+// /=	Division Assignment	x /= y
+// %=	Remainder Assignment	x %= y
+// <<=	Left Shift Assignment	x <<= y
+// >>=	Right Shift Assignment	x >>= y
+// >>>=	Unsigned Right Shift	x >>>= y
+// &=	Bitwise AND Assignment	x &= y
+// |=	Bitwise OR Assignment	x |= y
+// ^=	Bitwise XOR Assignment	x ^= y
+// &&=	Logical AND Assignment	x &&= y
+// ||=	Logical OR Assignment	x ||= y
+// =>	Arrow	x => y
+// yield	Pause / Resume	yield x
+// yield*	Delegate	yield* x
+// ...	Spread	... x
+// ,	Comma	x , y
+
+
+
+// ---------------------------------------
+
+
+
+// Chapter 5
+
+// Try,catch and finally
+
+let x=10;
+try{
+    var a=x/0;
+}
+catch(err){
+    console.log("You can't devide by 0");
+}
+finally{
+    console.log("Try another number other than zero");
+}
+
+// The try...catch...finally statements combo handles errors without stopping JavaScript.
+
+// The try statement defines the code block to run (to try).
+
+// The catch statement defines a code block to handle any error.
+
+// The finally statement defines a code block to run regardless of the result.
+
+// The throw statement defines a custom error.
+
+// Both catch and finally are optional, but you must use one of them.
+
+try {
+    // tryCode - Code block to run
+  }
+  catch(err) {
+    // catchCode - Code block to handle errors
+  }
+  finally {
+    // finallyCode - Code block to be executed regardless of the try result
+  }
+
+
+
+//  Switch
+
+switch(expression) {
+    case x:
+      // code block
+      break;
+    case y:
+      // code block
+      break;
+    default:
+      // code block
+  }
+//   This is how it works:
+  
+//   The switch expression is evaluated once.
+//   The value of the expression is compared with the values of each case.
+//   If there is a match, the associated block of code is executed.
+//   If there is no match, the default code block is executed.
+
+switch (new Date().getDay()) {
+    case 0:
+      day = "Sunday";
+      break;
+    case 1:
+      day = "Monday";
+      break;
+    case 2:
+       day = "Tuesday";
+      break;
+    case 3:
+      day = "Wednesday";
+      break;
+    case 4:
+      day = "Thursday";
+      break;
+    case 5:
+      day = "Friday";
+      break;
+    case 6:
+      day = "Saturday";
+  }
+//   Saturday
+
+
+
+// The break Keyword
+// When JavaScript reaches a break keyword, it breaks out of the switch block.
+
+// This will stop the execution inside the switch block.
+
+// It is not necessary to break the last case in a switch block. The block breaks (ends) there anyway.
+
+
+
+// The default keyword specifies the code to run if there is no case match:
+
+// Example
+// The getDay() method returns the weekday as a number between 0 and 6.
+
+// If today is neither Saturday (6) nor Sunday (0), write a default message:
+
+switch (new Date().getDay()) {
+  case 6:
+    text = "Today is Saturday";
+    break;
+  case 0:
+    text = "Today is Sunday";
+    break;
+  default:
+    text = "Looking forward to the Weekend";
+}
+// Today is Saturday
+
+// Sometimes you will want different switch cases to use the same code.
+
+// In this example case 4 and 5 share the same code block, and 0 and 6 share another code block:
+
+
+
+switch (new Date().getDay()) {
+  case 4:
+  case 5:
+    text = "Soon it is Weekend";
+    break;
+  case 0:
+  case 6:
+    text = "It is Weekend";
+    break;
+  default:
+    text = "Looking forward to the Weekend";
+}
+
+// Strict Comparison
+// Switch cases use strict comparison (===).
+
+// The values must be of the same type to match.
+
+// A strict comparison can only be true if the operands are of the same type.
+
+// In this example there will be no match for x:
+
+let x = "0";
+switch (x) {
+  case 0:
+    text = "Off";
+    break;
+  case 1:
+    text = "On";
+    break;
+  default:
+    text = "No value found";
+}
+
+
+
+//---------------------------------------------------------------------------
